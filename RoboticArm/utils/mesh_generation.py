@@ -15,6 +15,66 @@ def welzl(P, R):
     
     return welzl(P[1:], R + [p])
 
+def triangle_intersection(P1, P2):
+    flag =         segment_intersection(P1[0], P1[1], P2[0], P2[1])
+    flag = flag or segment_intersection(P1[0], P1[1], P2[1], P2[2])
+    flag = flag or segment_intersection(P1[0], P1[1], P2[2], P2[0])
+
+    flag = flag or segment_intersection(P1[1], P1[2], P2[0], P2[1])
+    flag = flag or segment_intersection(P1[1], P1[2], P2[1], P2[2])
+    flag = flag or segment_intersection(P1[1], P1[2], P2[2], P2[0])
+
+    flag = flag or segment_intersection(P1[2], P1[0], P2[0], P2[1])
+    flag = flag or segment_intersection(P1[2], P1[0], P2[1], P2[2])
+    flag = flag or segment_intersection(P1[2], P1[0], P2[2], P2[0])
+
+    if not flag:
+        in_triangle =                 point_in_triangle(P2[0], P1)
+        in_triangle = in_triangle and point_in_triangle(P2[1], P1)
+        in_triangle = in_triangle and point_in_triangle(P2[2], P1)
+        flag = flag or in_triangle
+
+    if not flag:
+        in_triangle =                 point_in_triangle(P1[0], P2)
+        in_triangle = in_triangle and point_in_triangle(P1[1], P2)
+        in_triangle = in_triangle and point_in_triangle(P1[2], P2)
+        flag = flag or in_triangle
+    
+    return flag
+
+def point_in_triangle(point: V, triangle: list[V]):
+    v0 = triangle[2] - triangle[0]
+    v1 = triangle[1] - triangle[0]
+    v2 = point - triangle[0]
+
+    u = v0.cross(v1)
+    v = v1.cross(v2)
+    d = v1.cross(v0)
+
+    if d<0:
+        u = -u
+        v = -v
+        d = -d
+
+    return u >=0 and v>=0 and (u+v) <= d
+
+def segment_intersection(P1, P2, P3, P4):
+    p = P1
+    r = P2 - P1
+
+    q = P3
+    s = P4 - P3
+
+    r_cross_s = r.cross(s)
+    if (r_cross_s == 0):
+        # the two lines are collinear
+        return (q-p).cross(r) == 0 # true if the lines share a segment, false otherwise (collinear but not intersection)
+    # else
+    t = (q-p).cross(s) / r_cross_s
+    u = (q-p).cross(r) / r_cross_s
+
+    
+    return 0 <= t and t <= 1 and 0 <= u and u <= 1
 
 def make_circumcircle(R):
     if len(R) == 3:

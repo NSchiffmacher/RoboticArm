@@ -25,6 +25,10 @@
         "confirm_new_obstacle": {
             "trigger": ["K_a"],
             "callback": null
+        },
+        "check_intersection": {
+            "trigger": ["K_a"],
+            "callback": null
         }
     }
 }

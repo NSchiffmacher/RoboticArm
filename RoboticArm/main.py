@@ -1,4 +1,5 @@
 from pygame.locals import *
+import pygame
 import imgui
 from pathlib import Path
 import easygui
@@ -107,16 +108,17 @@ class Scene(BaseScene):
     def load(self):
         self.window_size = V(self.app.options.window.width, self.app.options.window.height)
 
-        piece_size = V(20,4)
-        pivot = V(3,2)
-        attach = V(17,2)
-        self.arm = RoboticArm(V(0,0), math.radians(10), math.radians(90), piece_size,piece_size, pivot, pivot, attach, attach)
+        # Robitic Arm
+        piece_size = V(30,4)
+        pivot = V(2,2)
+        attach = V(28,2)
+        self.theta1 = math.radians(10)
+        self.theta2 = math.radians(-20)
+        self.arm = RoboticArm(V(0,0), self.theta1, self.theta2, piece_size,piece_size, pivot, pivot, attach, attach)
 
+        # Obstacles
         self.obstacles = ObstaclesManager()
         self.obstacles.load_from_json(Path(os.getcwd()) / self.options.obstacles_path / self.options.default_obstacles)
-
-        self.theta = 0
-        self.offset = 0
 
         self.main_focus = False
 
@@ -124,7 +126,29 @@ class Scene(BaseScene):
         self.add_obstacle = False
 
     def update(self, dt, events):
-        # Handle events
+        # Robotic arm events
+        if events.on_first_check_intersection and not self.io.key_ctrl:
+            angle = math.pi
+            N = 100
+
+            print('Compute CSPACE')
+            cspace = self.arm.computeCSPace([-angle, angle], [-angle, angle], N, self.obstacles)
+            print(cspace)
+
+        keys = pygame.key.get_pressed()
+        if keys[K_LEFT] or keys[K_RIGHT] or keys[K_UP] or keys[K_DOWN]:
+            speed = 40
+            if keys[K_LEFT]:
+                self.theta1 += dt * math.radians(speed)
+            if keys[K_RIGHT]:
+                self.theta1 -= dt * math.radians(speed)
+            if keys[K_UP]:
+                self.theta2 += dt * math.radians(speed)
+            if keys[K_DOWN]:
+                self.theta2 -= dt * math.radians(speed)
+            self.arm.update_angles(self.theta1, self.theta2)
+
+        # Obstacle events
         if events.on_first_new_obstacle and self.io.key_ctrl:
             self.add_obstacle = True
 
@@ -132,13 +156,11 @@ class Scene(BaseScene):
             self.add_obstacle = False
             self.obstacles.reset_current()
 
-
         # left click on main gui
         if self.main_focus and imgui.is_mouse_clicked():
             if self.add_obstacle:
                 mouse_pos = self.draw_frame_to_global_frame(V(*imgui.get_mouse_pos()))
                 self.obstacles.add_point_to_current_obstacle(mouse_pos)
-
 
         # right click on main gui
         if self.main_focus and imgui.is_mouse_clicked(imgui.MOUSE_BUTTON_MIDDLE):
@@ -148,18 +170,6 @@ class Scene(BaseScene):
                 
         if self.main_focus and events.on_first_confirm_new_obstacle and self.io.key_ctrl:
             self.obstacles.confirm_current()
-
-            # left_clicked = imgui.is_mouse_down(imgui.MOUSE_BUTTON_LEFT)
-            # right_clicked = imgui.is_mouse_down(imgui.MOUSE_BUTTON_MIDDLE)
-
-            # if left_clicked:
-            #     self.theta = math.atan2(mouse_pos.y, mouse_pos.x)
-            # elif right_clicked:
-            #     t_o = math.atan2(mouse_pos.y, mouse_pos.x) 
-            #     self.offset = t_o - self.theta
-
-            # self.piece1.update_theta(self.theta + self.offset)
-            # self.piece2.update(self.piece1.attach_position, self.theta-self.offset)
 
 
     def physics_update(self, dt):

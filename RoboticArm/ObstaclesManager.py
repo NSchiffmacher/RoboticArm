@@ -16,6 +16,12 @@ class ObstaclesManager:
 
         self.current_new_obstacle = Obstacle([], self.current_draw_mesh, False)
 
+    def get_all_triangles(self):
+        out = []
+        for o in self.obstacles:
+            out += o.triangles
+        return out
+
     def add_obstacle(self, o: Obstacle):
         self.obstacles.append(o)
 

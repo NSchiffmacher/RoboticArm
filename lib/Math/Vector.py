@@ -74,6 +74,8 @@ class Vector2:
         else:
             return self * (1/other)
     
+    def cross(self, other):
+        return self.x * other.y - self.y * other.x
     
     def dot_product(self, other):
         return self.x * other.x + self.y * other.y
