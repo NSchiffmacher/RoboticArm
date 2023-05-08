@@ -1,0 +1,10 @@
+{
+    "window": {
+        "width": 1200,
+        "height": 800,
+        "title": "C"
+    },
+    "entry_scene": "RoboticArm",
+
+    "GravitationalConstant":100000
+}

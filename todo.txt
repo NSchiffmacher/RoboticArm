@@ -1,0 +1,59 @@
+- [X] Ajouter des callbacks pour les events
+- [X] Ajouter les events pour la souris
+- [X] HUD.Button
+- [X] HUD.Canvas
+- [X] HUD.Label
+- [X] HUD.Slider
+- [X] HUD.Label : Pouvoir "scroll"
+- [X] HUD.VerticalSlider
+- [ ] HUD.PopUp
+- [ ] HUD.Graph
+- [ ] HUD.Image
+- [ ] Sprite.Sprite
+- [ ] Sprite.AnimatedSprite
+- [ ] Sprite.TileMap
+
+- [X] Gravity.Editor -> Pouvoir bouger les planètes, et ça change aussi la "trace"
+- [X] Gravity.Editor -> SidePanel
+
+
+### GRAPH ###
+Colors:
+    Background
+    Grid ?
+    self.curves = List of Curve
+
+    Draw la curve sur une surface, l'update que quand on change un point
+    Utiliser la simplification des lignes ?
+
+Curve class:
+    self.points = []
+    self.add_point(point)
+    self.color
+
+
+
+### Evenements ###
+Il y a deux possibilités :
+    Dans les options, keys contient un array de dict de la forme
+        {
+            "name" : str,
+            "trigger" : [str représentant les différentes touches, RMOUSE_CLICK, RMOUSE_DCLICK, etc...],
+            "callback": null ou string, le nom de la fonction dans la scene (optionnel)
+            "first_callback": null ou string, le nom de la fonction dans la scene (optionnel)
+                qui est a chaque fois que le groupe vient d'être déclenché
+        }
+
+### MOUSE EVENTS
+    Les évènements de la souris (dans les trigger), doivent être écris de la forme
+        [MOUSE_ID]MOUSE_[MOUSE_EVENT]
+
+        avec MOUSE_ID ∈ [R, L, M], un identifiant correspondant au bouton de la souris
+            - R : Right
+            - L : Left
+            - M : Middle
+
+        et MOUSE_EVENT ∈ [CLICK, DCLICK, UP], un identifiant correspondant à l'évènements
+            - CLICK : On clique sur la souris
+            - DCLICK : Double CLICK
+            - UP : On arrête de cliquer

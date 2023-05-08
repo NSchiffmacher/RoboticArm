@@ -1,0 +1,30 @@
+{
+    "fps_target": 60,
+    "physics_frame": 1,
+
+    "unit_vector_size_in_px": 10,
+
+    "background_color": [180,180,180],
+
+    "obstacles_path": "RoboticArm/obstacles",
+    "default_obstacles": "default.obstacles",
+    "new_obstacles": "new.obstacles",
+    "keys": {
+        "quitter": {
+            "trigger": ["K_ESCAPE"],
+            "callback": null
+        },
+        "new_obstacle": {
+            "trigger": ["K_n"],
+            "callback": null
+        },
+        "close_obstacle": {
+            "trigger": ["K_q"],
+            "callback": null
+        },
+        "confirm_new_obstacle": {
+            "trigger": ["K_a"],
+            "callback": null
+        }
+    }
+}

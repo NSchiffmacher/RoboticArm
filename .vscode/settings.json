@@ -1,0 +1,6 @@
+{
+    "code-runner.executorMap": {
+        "python": "cd \"/home/nathan/Code/2LinkRoboticArmImgui/\" && py main.py",
+        "json": "cd \"/home/nathan/Code/2LinkRoboticArmImgui/\" && py main.py",
+    }
+}
