@@ -1,1 +1,6 @@
 pygame
+imgui
+matplotlib
+numpy
+easygui
+pyopengl
